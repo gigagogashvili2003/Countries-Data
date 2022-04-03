@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import useHttp from "../api/use-http";
+import useHttp from "../hooks/use-http";
 import { getCountries } from "../lib/api";
 import CountriesList from "./CountriesList";
-import { Button, Spinner } from "react-bootstrap";
 
+import LoadingSpinner from "./UI/LoadingSpinner";
 function Countries() {
   const {
     sendRequest,
@@ -19,18 +19,7 @@ function Countries() {
   console.log(status);
 
   if (status === "pending" && !error && !loadedCountries) {
-    return (
-      <Button className="spinner" variant="primary" disabled>
-        <Spinner
-          as="span"
-          animation="grow"
-          size="sm"
-          role="status"
-          aria-hidden="true"
-        />
-        Loading...
-      </Button>
-    );
+    return <LoadingSpinner />;
   }
 
   if (status === "completed" && error) {
