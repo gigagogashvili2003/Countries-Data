@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import useHttp from "../api/use-http";
 import { getCountries } from "../lib/api";
 import CountriesList from "./CountriesList";
+import { Button, Spinner } from "react-bootstrap";
 
 function Countries() {
   const {
@@ -17,11 +18,22 @@ function Countries() {
 
   console.log(status);
 
-  if (status === "pending") {
-    return <p>Loadig...</p>;
+  if (status === "pending" && !error && !loadedCountries) {
+    return (
+      <Button className="spinner" variant="primary" disabled>
+        <Spinner
+          as="span"
+          animation="grow"
+          size="sm"
+          role="status"
+          aria-hidden="true"
+        />
+        Loading...
+      </Button>
+    );
   }
 
-  if (error) {
+  if (status === "completed" && error) {
     return <p>Data not found!</p>;
   }
 

@@ -28,7 +28,7 @@ function httpReducer(state, action) {
 
 const useHttp = (requestFunction) => {
   const [httpState, dispatch] = useReducer(httpReducer, {
-    data: [],
+    data: null,
     error: null,
     status: null,
   });
@@ -36,11 +36,14 @@ const useHttp = (requestFunction) => {
   const sendRequest = useCallback(
     async (data) => {
       dispatch({ type: "SEND" });
-      const responseData = await requestFunction(data);
-      dispatch({ type: "SUCCESS", responseData });
       try {
+        const responseData = await requestFunction(data);
+        dispatch({ type: "SUCCESS", responseData });
       } catch (err) {
-        dispatch({ type: "ERROR", error: err.message });
+        dispatch({
+          type: "ERROR",
+          error: err.message || "Something Went Wrong",
+        });
       }
     },
     [requestFunction]
